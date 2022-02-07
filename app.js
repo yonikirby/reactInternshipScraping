@@ -216,13 +216,17 @@ app.get('/news', (req, res) => {
   res.json(articles)
 })
 
+app.get('/terms', (req, res) => {
+  res.json(terms)
+})
+
 app.get('/news/:word', (req, res) => {
   const word = req.params.word
   const articleResult = articles.filter(article => article.title.includes(word))
   const termResult = terms.filter(term => term.title.includes(word))
   const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
   if (articleResult.length > 0) {
-    res.json('response')
+    res.json(``)
   } else {
     res.json(termResult)
   }
