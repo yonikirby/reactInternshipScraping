@@ -293,10 +293,10 @@ app.get("/users/:number/name", (req, res) => {
   const data = UsersModel.find({
     number: req.params.number,
   }, (err, data) => {
-    if (err) {
-      res.send(err);
+    if (data) {
+      res.send(data[0].name);
     } else {
-      res.json(data[0].name);
+      res.json(err);
     }
   });
 });
