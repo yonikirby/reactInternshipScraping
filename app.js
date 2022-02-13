@@ -293,7 +293,7 @@ app.get("/users/:number/name", (req, res) => {
   const data = UsersModel.find({
     number: req.params.number,
   }, (err, data) => {
-    if (data) {
+    if (data.length > 0) {
       res.send(data[0].name);
     } else {
       res.json(err);
