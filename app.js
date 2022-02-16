@@ -338,8 +338,10 @@ app.get("/milgot/:name", (req, res) => {
       res.send(err);
     } else {
       milgot.map(milga => {
-        milga.name.includes(req.params.name) &&
-          res.json(milga);
+        if(milga.name.includes(req.params.name)) {
+        response = `${milga.name} בלינק הבא: ${milga.adress}`
+          res.json(response);
+        }
       });
     }
   });
