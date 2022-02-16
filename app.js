@@ -243,7 +243,8 @@ app.get('/news/:word/title', (req, res) => {
     const response = `${termResult[0].title} - ${termResult[0].description} - כתבה לדוגמה: משעה ${example}`
     res.json(response)
   } else {
-    res.json(termResult)
+    const response = `${termResult[0].title} - ${termResult[0].description}`
+    res.json(response)
   }
 })
 app.get('/news/:word/description', (req, res) => {
