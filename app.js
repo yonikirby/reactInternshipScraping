@@ -332,17 +332,15 @@ app.get("/milgot", (req, res) => {
     }
   });
 });
-app.get("/milgot/:name", (req, res) => {
-  MyModel.find({}, (err, milgot) => {
+app.get("/milgot/:name/:number", (req, res) => {
+  const regex = new RegExp(req.params.name, 'i')
+  const data = []
+  MyModel.find({
+    name: {$regex: regex}}, (err, milgot) => {
     if (err) {
       res.send(err);
     } else {
-      milgot.map(milga => {
-        if(milga.name.includes(req.params.name)) {
-        response = `${milga.name} בלינק הבא: ${milga.adress}`
-          res.json(response);
-        }
-      });
+      res.json(milgot[req.params.number].name + 'בלינק הבא:' + milgot[req.params.number].adress);
     }
   });
 });
