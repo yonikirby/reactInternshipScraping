@@ -37,6 +37,9 @@ const MyModel = mongoose.model('Milgot', new Schema(
 const UsersModel = mongoose.model('Users', new Schema(
   { name: String, studies: String, number: String }));
 
+const TermModel = mongoose.model('Terms', new Schema(
+  { title: String, description: String}));
+
 const newspapers = [
   {
     name: 'NoCamels',
@@ -220,22 +223,22 @@ app.get('/terms', (req, res) => {
   res.json(terms)
 })
 
-app.get('/news/:word', (req, res) => {
-  const word = req.params.word
-  const articleResult = articles.filter(article => article.title.includes(word))
-  const termResult = terms.filter(term => term.title.includes(word))
-  const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
-  if (articleResult.length > 0) {
-    res.json(``)
-  } else {
-    res.json(termResult)
-  }
-})
+app.post('/term/add', async (req, res) => {
+  new TermModel(req.body)
+
+  TermModel.save
+
+  let termModel = new TermModel({ title: req.body.title, description: req.body.description});
+  TermModel = await TermModel.save();
+  res.send(termModel);
+});
+
+
 app.get('/news/:word/title', (req, res) => {
   const word = req.params.word
   const articleResult = articles.filter(article => article.title.includes(word))
   const termResult = terms.filter(term => term.title.includes(word))
-  const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
+  const example = articleResult.length > 0 ? (articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()) : ('אין דוגמה לכתבה')
   if (articleResult.length > 0) {
     const response = `${termResult[0].title} - ${termResult[0].description} - כתבה לדוגמה: משעה ${example}`
     res.json(response)
