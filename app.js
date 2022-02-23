@@ -312,7 +312,8 @@ app.get("/users/:number/studies", (req, res) => {
     if (err) {
       res.send(err);
     } else {
-      res.json(data[0].studies);
+      data.length > 0 ? res.json(data[0].studies) : res.send('אין מספר זה');
+      // res.json(data[0].studies);
     }
   });
 });
