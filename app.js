@@ -6,9 +6,16 @@ const serverless = require('serverless-http');
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 const path = require('path');
+const fs = require('fs');
 const favicon = require('serve-favicon');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { google } = require('googleapis');
+const CLIENT_ID = '512849584871-17jvkpfkt3ho4666e1vp9lg3cqraiml8.apps.googleusercontent.com'
+const CLIENT_SECRET = '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'
+const REDIRECT_URI = 'https://developers.google.com/oauthplayground'
+
+const REFRESH_TOKEN = '1//04xStBwrPjwgpCgYIARAAGAQSNwF-L9Ir0-iUDvVKFDuBKysSwCKh4FJZ19nCNg-wYIFIPRyMABAxzIPlh1Wfws_31gau53epxs0'
 
 app.use(cors())
 app.use(favicon(path.join(__dirname, "favicon.ico")));
@@ -312,7 +319,8 @@ app.get("/users/:number/studies", (req, res) => {
     if (err) {
       res.send(err);
     } else {
-      res.json(data[0].studies);
+      data > 0 ?
+      (res.json(data[0].studies)) : ''
     }
   });
 });
@@ -436,4 +444,43 @@ app.delete('/milgot/delete/:id', (req, res) => {
     });
   });
 });
+
+//google drive
+
+const oauth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URI
+)
+
+oauth2Client.setCredentials({
+  refresh_token: REFRESH_TOKEN
+})
+
+const drive = google.drive({
+  version: 'v3',
+  auth: oauth2Client
+})
+
+const filePath = path.join(__dirname, 'תיקוני לשון- סיכום (1).docx')
+
+async function uploadFile() {
+try {
+const response = await drive.files.create({
+requestBody: {
+  name: 'תיקוני לשון- סיכום (1).docx',
+  mimeType: 'application/vnd.google-apps.document'
+},
+media: {
+  mimeType: 'application/vnd.google-apps.document',
+  body: fs.createReadStream(filePath)
+
+  }
+});
+
+} catch (err) {
+  console.error(err.message)
+}
+}
+
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
