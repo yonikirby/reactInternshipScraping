@@ -194,6 +194,12 @@ newspapers.forEach(newspaper => {
 
 const terms = []
 
+app.get('/favicon.ico', (req, res) => res.status(204));
+
+app.get("/", (req, res) => {
+  res.json("BerlBot's API");
+});
+
 // termSites.forEach(term => {
 //   axios.get(term.address)
 //     .then(response => {
@@ -293,35 +299,31 @@ app.get("/users", (req, res) => {
   });
 });
 
-app.get("/users/:number/name", (req, res) => {
-  const data = UsersModel.find({
-    number: req.params.number,
-  }, (err, data) => {
-    if (data.length > 0) {
-      res.send(data[0].name);
-    } else {
-      res.json(err);
-    }
-  });
-});
+// app.get("/users/:number/name", (req, res) => {
+//   const data = UsersModel.find({
+//     number: req.params.number,
+//   }, (err, data) => {
+//     if (data.length > 0) {
+//       res.send(data[0].name);
+//     } else {
+//       res.json(err);
+//     }
+//   });
+// });
 
-app.get("/users/:number/studies", (req, res) => {
-  const data = UsersModel.find({
-    number: req.params.number,
-  }, (err, data) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(data[0].studies);
-    }
-  });
-});
+// app.get("/users/:number/studies", (req, res) => {
+//   const data = UsersModel.find({
+//     number: req.params.number,
+//   }, (err, data) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.json(data[0].studies);
+//     }
+//   });
+// });
 
-app.get('/favicon.ico', (req, res) => res.status(204));
 
-app.get("/", (req, res) => {
-  res.json("BerlBot's API");
-});
 
 app.get("/milgot", (req, res) => {
   MyModel.find({}, (err, milgot) => {
