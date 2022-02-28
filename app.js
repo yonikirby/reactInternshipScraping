@@ -323,119 +323,119 @@ app.get("/", (req, res) => {
   res.json("BerlBot's API");
 });
 
-// app.get("/milgot", (req, res) => {
-//   MyModel.find({}, (err, milgot) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(milgot);
-//     }
-//   });
-// });
-// app.get("/milgot/:name/:number", (req, res) => {
-//   const regex = new RegExp(req.params.name, 'i')
-//   MyModel.find({
-//     ForWho: {$regex: regex}}, (err, milgot) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(milgot[req.params.number].name + 'בלינק הבא:' + milgot[req.params.number].adress);
-//     }
-//   });
-// });
-// app.get("/length/:name", (req, res) => {
-//   const regex = new RegExp(req.params.name, 'i')
-//   MyModel.find({
-//     ForWho: {$regex: regex}}, (err, milgot) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(milgot.length);
-//     }
-//   });
-// });
+app.get("/milgot", (req, res) => {
+  MyModel.find({}, (err, milgot) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(milgot);
+    }
+  });
+});
+app.get("/milgot/:name/:number", (req, res) => {
+  const regex = new RegExp(req.params.name, 'i')
+  MyModel.find({
+    ForWho: {$regex: regex}}, (err, milgot) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(milgot[req.params.number].name + 'בלינק הבא:' + milgot[req.params.number].adress);
+    }
+  });
+});
+app.get("/length/:name", (req, res) => {
+  const regex = new RegExp(req.params.name, 'i')
+  MyModel.find({
+    ForWho: {$regex: regex}}, (err, milgot) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(milgot.length);
+    }
+  });
+});
 
 
-// app.get("/milgot/:milgaId", (req, res) => {
-//   const data = MyModel.find({
-//     base: req.params.milgaId,
-//   }, (err, data) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(data);
-//     }
-//   });
-// });
+app.get("/milgot/:milgaId", (req, res) => {
+  const data = MyModel.find({
+    base: req.params.milgaId,
+  }, (err, data) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(data);
+    }
+  });
+});
 
-// app.get("/milgot/:milgaId/:forwho", (req, res) => {
-//   const data = MyModel.find({
-//     base: req.params.milgaId,
-//   }, (err, data) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       data.map(milga => {
-//         if (milga.ForWho) {
-//           milga.ForWho.includes(req.params.forwho) &&
-//             res.json(milga)
-//         }
-//       })
-//     }
-//   });
-// });
+app.get("/milgot/:milgaId/:forwho", (req, res) => {
+  const data = MyModel.find({
+    base: req.params.milgaId,
+  }, (err, data) => {
+    if (err) {
+      res.send(err);
+    } else {
+      data.map(milga => {
+        if (milga.ForWho) {
+          milga.ForWho.includes(req.params.forwho) &&
+            res.json(milga)
+        }
+      })
+    }
+  });
+});
 
-// app.get("/milgot/forwho/:data", (req, res) => {
-//   const data = MyModel.find({
-//     ForWho: req.params.milgaId,
-//   }, (err, data) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(data);
-//     }
-//   });
-// });
+app.get("/milgot/forwho/:data", (req, res) => {
+  const data = MyModel.find({
+    ForWho: req.params.milgaId,
+  }, (err, data) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(data);
+    }
+  });
+});
 
-// app.get("/milgot/id/:id", (req, res) => {
-//   const data = MyModel.findOne({
-//     _id: req.params.id,
-//   }, (err, data) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(data);
-//     }
-//   });
-// });
-
-
-// app.post('/milgot/add', async (req, res) => {
-//   new MyModel(req.body)
-
-//   MyModel.save
-
-//   let myModel = new MyModel({ name: req.body.name, adress: req.body.address, base: req.body.base, ForWho: req.body.ForWho });
-//   myModel = await myModel.save();
-//   res.send(myModel);
-// });
-
-// app.delete('/milgot/delete/:id', (req, res) => {
-//   MyModel.findByIdAndRemove(req.params.id, (err, milga) => {
+app.get("/milgot/id/:id", (req, res) => {
+  const data = MyModel.findOne({
+    _id: req.params.id,
+  }, (err, data) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(data);
+    }
+  });
+});
 
 
-//     app.post('/milgot/bulkupload', async (req, res) => {
-//       (async function () {
-//         for await (let milga of Milgot) {
-//           let myModel = new MyModel({ name: milga.name, adress: milga.adress, base: milga.base, ForWho: milga.ForWho });
-//           myModel = myModel.save();
-//           res.send(myModel);
-//         }
-//       })();
+app.post('/milgot/add', async (req, res) => {
+  new MyModel(req.body)
 
-//     });
-//   });
-// });
+  MyModel.save
+
+  let myModel = new MyModel({ name: req.body.name, adress: req.body.address, base: req.body.base, ForWho: req.body.ForWho });
+  myModel = await myModel.save();
+  res.send(myModel);
+});
+
+app.delete('/milgot/delete/:id', (req, res) => {
+  MyModel.findByIdAndRemove(req.params.id, (err, milga) => {
+
+
+    app.post('/milgot/bulkupload', async (req, res) => {
+      (async function () {
+        for await (let milga of Milgot) {
+          let myModel = new MyModel({ name: milga.name, adress: milga.adress, base: milga.base, ForWho: milga.ForWho });
+          myModel = myModel.save();
+          res.send(myModel);
+        }
+      })();
+
+    });
+  });
+});
 
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
