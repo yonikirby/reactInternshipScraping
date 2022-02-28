@@ -194,34 +194,34 @@ newspapers.forEach(newspaper => {
 
 const terms = []
 
-termSites.forEach(term => {
-  axios.get(term.address)
-    .then(response => {
-      const html = response.data
-      const $ = cheerio.load(html)
+// termSites.forEach(term => {
+//   axios.get(term.address)
+//     .then(response => {
+//       const html = response.data
+//       const $ = cheerio.load(html)
 
-      $('p', html).each(function () {
-        if ($(this).text().includes('(')) {
-          const title = $(this).text()
-          const secondTitle = title.substr(0, title.indexOf('.'))
-          const description = $(this).next('p').text()
-          terms.push({
-            title,
-            description: description,
-            source: term.name,
-          })
-        }
-      })
-    })
-})
+//       $('p', html).each(function () {
+//         if ($(this).text().includes('(')) {
+//           const title = $(this).text()
+//           const secondTitle = title.substr(0, title.indexOf('.'))
+//           const description = $(this).next('p').text()
+//           terms.push({
+//             title,
+//             description: description,
+//             source: term.name,
+//           })
+//         }
+//       })
+//     })
+// })
 
-app.get('/news', (req, res) => {
-  res.json(articles)
-})
+// app.get('/news', (req, res) => {
+//   res.json(articles)
+// })
 
-app.get('/terms', (req, res) => {
-  res.json(terms)
-})
+// app.get('/terms', (req, res) => {
+//   res.json(terms)
+// })
 
 // app.post('/term/add', async (req, res) => {
 //   new TermModel(req.body)
@@ -272,50 +272,50 @@ app.get('/terms', (req, res) => {
 // })
 
 
-// // user data
-// app.post('/user/add', async (req, res) => {
-//   new UsersModel(req.body)
+// user data
+app.post('/user/add', async (req, res) => {
+  new UsersModel(req.body)
 
-//   UsersModel.save
+  UsersModel.save
 
-//   let usersModel = new UsersModel({ name: req.body.name, studies: req.body.studies, number: req.body.number });
-//   usersModel = await usersModel.save();
-//   res.send(usersModel);
-// });
+  let usersModel = new UsersModel({ name: req.body.name, studies: req.body.studies, number: req.body.number });
+  usersModel = await usersModel.save();
+  res.send(usersModel);
+});
 
-// app.get("/users", (req, res) => {
-//   UsersModel.find({}, (err, users) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(users);
-//     }
-//   });
-// });
+app.get("/users", (req, res) => {
+  UsersModel.find({}, (err, users) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(users);
+    }
+  });
+});
 
-// app.get("/users/:number/name", (req, res) => {
-//   const data = UsersModel.find({
-//     number: req.params.number,
-//   }, (err, data) => {
-//     if (data.length > 0) {
-//       res.send(data[0].name);
-//     } else {
-//       res.json(err);
-//     }
-//   });
-// });
+app.get("/users/:number/name", (req, res) => {
+  const data = UsersModel.find({
+    number: req.params.number,
+  }, (err, data) => {
+    if (data.length > 0) {
+      res.send(data[0].name);
+    } else {
+      res.json(err);
+    }
+  });
+});
 
-// app.get("/users/:number/studies", (req, res) => {
-//   const data = UsersModel.find({
-//     number: req.params.number,
-//   }, (err, data) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(data[0].studies);
-//     }
-//   });
-// });
+app.get("/users/:number/studies", (req, res) => {
+  const data = UsersModel.find({
+    number: req.params.number,
+  }, (err, data) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(data[0].studies);
+    }
+  });
+});
 
 app.get('/favicon.ico', (req, res) => res.status(204));
 
