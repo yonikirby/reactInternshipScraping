@@ -11,6 +11,9 @@ const favicon = require('serve-favicon');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { google } = require('googleapis');
+const { object } = require('webidl-conversions')
+
+
 const CLIENT_ID = '512849584871-17jvkpfkt3ho4666e1vp9lg3cqraiml8.apps.googleusercontent.com'
 const CLIENT_SECRET = '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'
 const REDIRECT_URI = 'https://developers.google.com/oauthplayground'
@@ -464,6 +467,7 @@ const drive = google.drive({
 
 const filePath = path.join(__dirname, 'תיקוני לשון- סיכום (1).docx')
 
+
 async function uploadFile() {
 try {
 const response = await drive.files.create({
@@ -482,5 +486,76 @@ media: {
   console.error(err.message)
 }
 }
+
+app.get('/getQandA/:id', async (req, res) => {
+  const auth = new google.auth.GoogleAuth({
+      keyFile: 'credentials.json',
+      scopes: 'https://www.googleapis.com/auth/spreadsheets'
+  })
+
+  //create client instance
+  const client = await auth.getClient()
+
+  //instance of google sheets api
+  const googlesheets = google.sheets({
+      version: 'v4',
+      auth: client
+  }) 
+
+  const id = req.params.id
+
+  //get meta data about spreasheet
+  const data = await googlesheets.spreadsheets.get({
+      auth,
+      spreadsheetId: id
+  })
+
+  //read rows from spreadsheet
+  const getRows = await googlesheets.spreadsheets.values.get({
+      auth, 
+      spreadsheetId: id,
+      range: data.data.sheets[0].properties.title
+  })
+
+  const values = getRows.data.values
+  delete values[0]
+  let questions = []
+  if(values.length > 0){
+      let i = 1;
+      let questionsArray = []
+      values.forEach((data, index) => {
+          questions.push({
+              question_id: index,
+              question: data[0],
+              answers: [
+                  {
+                      answer_id: 1,
+                      text: data[1],
+                      correct: true
+                  },
+                  {
+                      answer_id: 2, 
+                      text: data[2],
+                      correct: false
+                  },
+                  {
+                      answer_id: 3,
+                      text: data[3],
+                      correct: false
+                  },
+                  {
+                      answer_id: 4,
+                      text: data[4],
+                      correct: false
+                  }
+              ]
+          })
+      })
+
+  }
+  console.log(questions)
+
+  res.send(questions)
+})
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
