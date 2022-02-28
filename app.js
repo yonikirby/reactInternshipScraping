@@ -41,31 +41,31 @@ const TermModel = mongoose.model('Terms', new Schema(
   { title: String, description: String}));
 
 const newspapers = [
-  // {
-  //   name: 'NoCamels',
-  //   address: `https://nocamels.com/category/technology/`,
-  //   base: ''
-  // },
-  // {
-  //   name: 'Calcalist',
-  //   address: `https://www.calcalistech.com/ctech/home/0,7340,L-5211,00.html`,
-  //   base: ''
-  // },
-  // {
-  //   name: 'TimesOfIsrael',
-  //   address: `https://www.timesofisrael.com/tech-israel/`,
-  //   base: ''
-  // },
-  // {
-  //   name: 'TimesOfIsrael',
-  //   address: `https://www.timesofisrael.com/israel-inside/`,
-  //   base: ''
-  // },
-  // {
-  //   name: 'Haaretz',
-  //   address: `https://www.haaretz.com/israel-news/tech-news`,
-  //   base: ''
-  // },
+  {
+    name: 'NoCamels',
+    address: `https://nocamels.com/category/technology/`,
+    base: ''
+  },
+  {
+    name: 'Calcalist',
+    address: `https://www.calcalistech.com/ctech/home/0,7340,L-5211,00.html`,
+    base: ''
+  },
+  {
+    name: 'TimesOfIsrael',
+    address: `https://www.timesofisrael.com/tech-israel/`,
+    base: ''
+  },
+  {
+    name: 'TimesOfIsrael',
+    address: `https://www.timesofisrael.com/israel-inside/`,
+    base: ''
+  },
+  {
+    name: 'Haaretz',
+    address: `https://www.haaretz.com/israel-news/tech-news`,
+    base: ''
+  },
   {
     name: 'כלכליסט',
     address: `https://www.calcalist.co.il/calcalistech`,
@@ -356,86 +356,86 @@ app.get("/length/:name", (req, res) => {
 });
 
 
-app.get("/milgot/:milgaId", (req, res) => {
-  const data = MyModel.find({
-    base: req.params.milgaId,
-  }, (err, data) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(data);
-    }
-  });
-});
+// app.get("/milgot/:milgaId", (req, res) => {
+//   const data = MyModel.find({
+//     base: req.params.milgaId,
+//   }, (err, data) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.json(data);
+//     }
+//   });
+// });
 
-app.get("/milgot/:milgaId/:forwho", (req, res) => {
-  const data = MyModel.find({
-    base: req.params.milgaId,
-  }, (err, data) => {
-    if (err) {
-      res.send(err);
-    } else {
-      data.map(milga => {
-        if (milga.ForWho) {
-          milga.ForWho.includes(req.params.forwho) &&
-            res.json(milga)
-        }
-      })
-    }
-  });
-});
+// app.get("/milgot/:milgaId/:forwho", (req, res) => {
+//   const data = MyModel.find({
+//     base: req.params.milgaId,
+//   }, (err, data) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       data.map(milga => {
+//         if (milga.ForWho) {
+//           milga.ForWho.includes(req.params.forwho) &&
+//             res.json(milga)
+//         }
+//       })
+//     }
+//   });
+// });
 
-app.get("/milgot/forwho/:data", (req, res) => {
-  const data = MyModel.find({
-    ForWho: req.params.milgaId,
-  }, (err, data) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(data);
-    }
-  });
-});
+// app.get("/milgot/forwho/:data", (req, res) => {
+//   const data = MyModel.find({
+//     ForWho: req.params.milgaId,
+//   }, (err, data) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.json(data);
+//     }
+//   });
+// });
 
-app.get("/milgot/id/:id", (req, res) => {
-  const data = MyModel.findOne({
-    _id: req.params.id,
-  }, (err, data) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(data);
-    }
-  });
-});
-
-
-app.post('/milgot/add', async (req, res) => {
-  new MyModel(req.body)
-
-  MyModel.save
-
-  let myModel = new MyModel({ name: req.body.name, adress: req.body.address, base: req.body.base, ForWho: req.body.ForWho });
-  myModel = await myModel.save();
-  res.send(myModel);
-});
-
-app.delete('/milgot/delete/:id', (req, res) => {
-  MyModel.findByIdAndRemove(req.params.id, (err, milga) => {
+// app.get("/milgot/id/:id", (req, res) => {
+//   const data = MyModel.findOne({
+//     _id: req.params.id,
+//   }, (err, data) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.json(data);
+//     }
+//   });
+// });
 
 
-    app.post('/milgot/bulkupload', async (req, res) => {
-      (async function () {
-        for await (let milga of Milgot) {
-          let myModel = new MyModel({ name: milga.name, adress: milga.adress, base: milga.base, ForWho: milga.ForWho });
-          myModel = myModel.save();
-          res.send(myModel);
-        }
-      })();
+// app.post('/milgot/add', async (req, res) => {
+//   new MyModel(req.body)
 
-    });
-  });
-});
+//   MyModel.save
+
+//   let myModel = new MyModel({ name: req.body.name, adress: req.body.address, base: req.body.base, ForWho: req.body.ForWho });
+//   myModel = await myModel.save();
+//   res.send(myModel);
+// });
+
+// app.delete('/milgot/delete/:id', (req, res) => {
+//   MyModel.findByIdAndRemove(req.params.id, (err, milga) => {
+
+
+//     app.post('/milgot/bulkupload', async (req, res) => {
+//       (async function () {
+//         for await (let milga of Milgot) {
+//           let myModel = new MyModel({ name: milga.name, adress: milga.adress, base: milga.base, ForWho: milga.ForWho });
+//           myModel = myModel.save();
+//           res.send(myModel);
+//         }
+//       })();
+
+//     });
+//   });
+// });
 
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
