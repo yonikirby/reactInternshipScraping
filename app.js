@@ -173,55 +173,55 @@ const termSites = [
 ]
 const articles = []
 
-// newspapers.forEach(newspaper => {
-//   axios.get(newspaper.address)
-//     .then(response => {
-//       const html = response.data
-//       const $ = cheerio.load(html)
+newspapers.forEach(newspaper => {
+  axios.get(newspaper.address)
+    .then(response => {
+      const html = response.data
+      const $ = cheerio.load(html)
 
-//       $('a', html).each(function () {
-//         const title = $(this).text()
-//         const url = $(this).attr('href')
+      $('a', html).each(function () {
+        const title = $(this).text()
+        const url = $(this).attr('href')
 
-//         articles.push({
-//           title,
-//           url: newspaper.base + url,
-//           source: newspaper.name
-//         })
-//       })
-//     })
-// })
+        articles.push({
+          title,
+          url: newspaper.base + url,
+          source: newspaper.name
+        })
+      })
+    })
+})
 
-// const terms = []
+const terms = []
 
-// termSites.forEach(term => {
-//   axios.get(term.address)
-//     .then(response => {
-//       const html = response.data
-//       const $ = cheerio.load(html)
+termSites.forEach(term => {
+  axios.get(term.address)
+    .then(response => {
+      const html = response.data
+      const $ = cheerio.load(html)
 
-//       $('p', html).each(function () {
-//         if ($(this).text().includes('(')) {
-//           const title = $(this).text()
-//           const secondTitle = title.substr(0, title.indexOf('.'))
-//           const description = $(this).next('p').text()
-//           terms.push({
-//             title,
-//             description: description,
-//             source: term.name,
-//           })
-//         }
-//       })
-//     })
-// })
+      $('p', html).each(function () {
+        if ($(this).text().includes('(')) {
+          const title = $(this).text()
+          const secondTitle = title.substr(0, title.indexOf('.'))
+          const description = $(this).next('p').text()
+          terms.push({
+            title,
+            description: description,
+            source: term.name,
+          })
+        }
+      })
+    })
+})
 
-// app.get('/news', (req, res) => {
-//   res.json(articles)
-// })
+app.get('/news', (req, res) => {
+  res.json(articles)
+})
 
-// app.get('/terms', (req, res) => {
-//   res.json(terms)
-// })
+app.get('/terms', (req, res) => {
+  res.json(terms)
+})
 
 // app.post('/term/add', async (req, res) => {
 //   new TermModel(req.body)
