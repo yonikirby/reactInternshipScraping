@@ -2,6 +2,7 @@ const express = require('express')
 const axios = require('axios')
 const cheerio = require('cheerio')
 const app = express()
+const serverless = require('serverless-http');
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 const path = require('path');
@@ -311,8 +312,7 @@ app.get("/users/:number/studies", (req, res) => {
     if (err) {
       res.send(err);
     } else {
-      data > 0 ?
-      (res.json(data[0].studies)) : ''
+      res.json(data[0].studies);
     }
   });
 });
@@ -436,5 +436,6 @@ app.delete('/milgot/delete/:id', (req, res) => {
     });
   });
 });
+
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
