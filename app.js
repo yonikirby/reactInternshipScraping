@@ -173,149 +173,149 @@ const termSites = [
 ]
 const articles = []
 
-newspapers.forEach(newspaper => {
-  axios.get(newspaper.address)
-    .then(response => {
-      const html = response.data
-      const $ = cheerio.load(html)
+// newspapers.forEach(newspaper => {
+//   axios.get(newspaper.address)
+//     .then(response => {
+//       const html = response.data
+//       const $ = cheerio.load(html)
 
-      $('a', html).each(function () {
-        const title = $(this).text()
-        const url = $(this).attr('href')
+//       $('a', html).each(function () {
+//         const title = $(this).text()
+//         const url = $(this).attr('href')
 
-        articles.push({
-          title,
-          url: newspaper.base + url,
-          source: newspaper.name
-        })
-      })
-    })
-})
+//         articles.push({
+//           title,
+//           url: newspaper.base + url,
+//           source: newspaper.name
+//         })
+//       })
+//     })
+// })
 
-const terms = []
+// const terms = []
 
-termSites.forEach(term => {
-  axios.get(term.address)
-    .then(response => {
-      const html = response.data
-      const $ = cheerio.load(html)
+// termSites.forEach(term => {
+//   axios.get(term.address)
+//     .then(response => {
+//       const html = response.data
+//       const $ = cheerio.load(html)
 
-      $('p', html).each(function () {
-        if ($(this).text().includes('(')) {
-          const title = $(this).text()
-          const secondTitle = title.substr(0, title.indexOf('.'))
-          const description = $(this).next('p').text()
-          terms.push({
-            title,
-            description: description,
-            source: term.name,
-          })
-        }
-      })
-    })
-})
+//       $('p', html).each(function () {
+//         if ($(this).text().includes('(')) {
+//           const title = $(this).text()
+//           const secondTitle = title.substr(0, title.indexOf('.'))
+//           const description = $(this).next('p').text()
+//           terms.push({
+//             title,
+//             description: description,
+//             source: term.name,
+//           })
+//         }
+//       })
+//     })
+// })
 
-app.get('/news', (req, res) => {
-  res.json(articles)
-})
+// app.get('/news', (req, res) => {
+//   res.json(articles)
+// })
 
-app.get('/terms', (req, res) => {
-  res.json(terms)
-})
+// app.get('/terms', (req, res) => {
+//   res.json(terms)
+// })
 
-app.post('/term/add', async (req, res) => {
-  new TermModel(req.body)
+// app.post('/term/add', async (req, res) => {
+//   new TermModel(req.body)
 
-  TermModel.save
+//   TermModel.save
 
-  let termModel = new TermModel({ title: req.body.title, description: req.body.description});
-  TermModel = await TermModel.save();
-  res.send(termModel);
-});
-
-
-app.get('/news/:word/title', (req, res) => {
-  const word = req.params.word
-  const articleResult = articles.filter(article => article.title.includes(word))
-  const termResult = terms.filter(term => term.title.includes(word))
-  const example = articleResult.length > 0 ? (articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()) : ('אין דוגמה לכתבה')
-  if (articleResult.length > 0) {
-    const response = `${termResult[0].title} - ${termResult[0].description} - כתבה לדוגמה: משעה ${example}`
-    res.json(response)
-  } else {
-    const response = `${termResult[0].title} - ${termResult[0].description}`
-    res.json(response)
-  }
-})
-app.get('/news/:word/description', (req, res) => {
-  const word = req.params.word
-  const articleResult = articles.filter(article => article.title.includes(word))
-  const termResult = terms.filter(term => term.title.includes(word))
-  const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
-  if (articleResult.length > 0) {
-    res.json(termResult[0].description)
-  } else {
-    res.json(termResult)
-  }
-})
-
-app.get('/news/:word/example', (req, res) => {
-  const word = req.params.word
-  const articleResult = articles.filter(article => article.title.includes(word))
-  const termResult = terms.filter(term => term.title.includes(word))
-  const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
-  if (articleResult.length > 0) {
-    res.json(example)
-  } else {
-    res.json(termResult)
-  }
-})
+//   let termModel = new TermModel({ title: req.body.title, description: req.body.description});
+//   TermModel = await TermModel.save();
+//   res.send(termModel);
+// });
 
 
-// user data
-app.post('/user/add', async (req, res) => {
-  new UsersModel(req.body)
+// app.get('/news/:word/title', (req, res) => {
+//   const word = req.params.word
+//   const articleResult = articles.filter(article => article.title.includes(word))
+//   const termResult = terms.filter(term => term.title.includes(word))
+//   const example = articleResult.length > 0 ? (articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()) : ('אין דוגמה לכתבה')
+//   if (articleResult.length > 0) {
+//     const response = `${termResult[0].title} - ${termResult[0].description} - כתבה לדוגמה: משעה ${example}`
+//     res.json(response)
+//   } else {
+//     const response = `${termResult[0].title} - ${termResult[0].description}`
+//     res.json(response)
+//   }
+// })
+// app.get('/news/:word/description', (req, res) => {
+//   const word = req.params.word
+//   const articleResult = articles.filter(article => article.title.includes(word))
+//   const termResult = terms.filter(term => term.title.includes(word))
+//   const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
+//   if (articleResult.length > 0) {
+//     res.json(termResult[0].description)
+//   } else {
+//     res.json(termResult)
+//   }
+// })
 
-  UsersModel.save
+// app.get('/news/:word/example', (req, res) => {
+//   const word = req.params.word
+//   const articleResult = articles.filter(article => article.title.includes(word))
+//   const termResult = terms.filter(term => term.title.includes(word))
+//   const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
+//   if (articleResult.length > 0) {
+//     res.json(example)
+//   } else {
+//     res.json(termResult)
+//   }
+// })
 
-  let usersModel = new UsersModel({ name: req.body.name, studies: req.body.studies, number: req.body.number });
-  usersModel = await usersModel.save();
-  res.send(usersModel);
-});
 
-app.get("/users", (req, res) => {
-  UsersModel.find({}, (err, users) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(users);
-    }
-  });
-});
+// // user data
+// app.post('/user/add', async (req, res) => {
+//   new UsersModel(req.body)
 
-app.get("/users/:number/name", (req, res) => {
-  const data = UsersModel.find({
-    number: req.params.number,
-  }, (err, data) => {
-    if (data.length > 0) {
-      res.send(data[0].name);
-    } else {
-      res.json(err);
-    }
-  });
-});
+//   UsersModel.save
 
-app.get("/users/:number/studies", (req, res) => {
-  const data = UsersModel.find({
-    number: req.params.number,
-  }, (err, data) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(data[0].studies);
-    }
-  });
-});
+//   let usersModel = new UsersModel({ name: req.body.name, studies: req.body.studies, number: req.body.number });
+//   usersModel = await usersModel.save();
+//   res.send(usersModel);
+// });
+
+// app.get("/users", (req, res) => {
+//   UsersModel.find({}, (err, users) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.json(users);
+//     }
+//   });
+// });
+
+// app.get("/users/:number/name", (req, res) => {
+//   const data = UsersModel.find({
+//     number: req.params.number,
+//   }, (err, data) => {
+//     if (data.length > 0) {
+//       res.send(data[0].name);
+//     } else {
+//       res.json(err);
+//     }
+//   });
+// });
+
+// app.get("/users/:number/studies", (req, res) => {
+//   const data = UsersModel.find({
+//     number: req.params.number,
+//   }, (err, data) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.json(data[0].studies);
+//     }
+//   });
+// });
 
 app.get('/favicon.ico', (req, res) => res.status(204));
 
@@ -323,37 +323,37 @@ app.get("/", (req, res) => {
   res.json("BerlBot's API");
 });
 
-app.get("/milgot", (req, res) => {
-  MyModel.find({}, (err, milgot) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(milgot);
-    }
-  });
-});
-app.get("/milgot/:name/:number", (req, res) => {
-  const regex = new RegExp(req.params.name, 'i')
-  MyModel.find({
-    ForWho: {$regex: regex}}, (err, milgot) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(milgot[req.params.number].name + 'בלינק הבא:' + milgot[req.params.number].adress);
-    }
-  });
-});
-app.get("/length/:name", (req, res) => {
-  const regex = new RegExp(req.params.name, 'i')
-  MyModel.find({
-    ForWho: {$regex: regex}}, (err, milgot) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(milgot.length);
-    }
-  });
-});
+// app.get("/milgot", (req, res) => {
+//   MyModel.find({}, (err, milgot) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.json(milgot);
+//     }
+//   });
+// });
+// app.get("/milgot/:name/:number", (req, res) => {
+//   const regex = new RegExp(req.params.name, 'i')
+//   MyModel.find({
+//     ForWho: {$regex: regex}}, (err, milgot) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.json(milgot[req.params.number].name + 'בלינק הבא:' + milgot[req.params.number].adress);
+//     }
+//   });
+// });
+// app.get("/length/:name", (req, res) => {
+//   const regex = new RegExp(req.params.name, 'i')
+//   MyModel.find({
+//     ForWho: {$regex: regex}}, (err, milgot) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       res.json(milgot.length);
+//     }
+//   });
+// });
 
 
 // app.get("/milgot/:milgaId", (req, res) => {
