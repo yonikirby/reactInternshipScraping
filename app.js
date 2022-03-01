@@ -1,5 +1,5 @@
 const express = require('express')
-const axios = require('axios')
+const axios = require('axios').default;
 const cheerio = require('cheerio')
 const app = express()
 const cors = require('cors');
@@ -25,10 +25,10 @@ var reqTimer = setTimeout(function wakeUp() {
 }, 1200000);
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://yonatan1261:Dimoy2021@cluster0.pfw9n.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", console.log('mongoose connected'),
-  {
-    useNewUrlParser: true,
-    useFindAndModify: false
-  });
+{
+  useNewUrlParser: true,
+  useFindAndModify: false
+});
 
 const MyModel = mongoose.model('Milgot', new Schema(
   { name: String, adress: String, base: String, ForWho: String }));
@@ -36,10 +36,10 @@ const MyModel = mongoose.model('Milgot', new Schema(
 const UsersModel = mongoose.model('Users', new Schema(
   { name: String, studies: String, number: String }));
 
-const TermModel = mongoose.model('Terms', new Schema(
+  const TermModel = mongoose.model('Terms', new Schema(
   { title: String, description: String}));
-
-const newspapers = [
+  
+  const newspapers = [
   {
     name: 'NoCamels',
     address: `https://nocamels.com/category/technology/`,
@@ -177,7 +177,7 @@ newspapers.forEach(newspaper => {
     .then(response => {
       const html = response.data
       const $ = cheerio.load(html)
-
+      
       $('a', html).each(function () {
         const title = $(this).text()
         const url = $(this).attr('href')
