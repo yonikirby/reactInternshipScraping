@@ -40,157 +40,157 @@ const UsersModel = mongoose.model('Users', new Schema(
 const TermModel = mongoose.model('Terms', new Schema(
   { title: String, description: String}));
 
-const newspapers = [
-  {
-    name: 'NoCamels',
-    address: `https://nocamels.com/category/technology/`,
-    base: ''
-  },
-  {
-    name: 'Calcalist',
-    address: `https://www.calcalistech.com/ctech/home/0,7340,L-5211,00.html`,
-    base: ''
-  },
-  {
-    name: 'TimesOfIsrael',
-    address: `https://www.timesofisrael.com/tech-israel/`,
-    base: ''
-  },
-  {
-    name: 'TimesOfIsrael',
-    address: `https://www.timesofisrael.com/israel-inside/`,
-    base: ''
-  },
-  {
-    name: 'Haaretz',
-    address: `https://www.haaretz.com/israel-news/tech-news`,
-    base: ''
-  },
-  {
-    name: 'כלכליסט',
-    address: `https://www.calcalist.co.il/calcalistech`,
-    base: ''
-  },
-  {
-    name: 'גיקטיים',
-    address: `https://www.geektime.co.il/`,
-    base: ''
-  },
-  {
-    name: 'גיקטיים',
-    address: `https://www.geektime.co.il/category/startup/`,
-    base: ''
-  },
-  {
-    name: 'גיקטיים',
-    address: `https://www.geektime.co.il/category/development/`,
-    base: ''
-  },
-  {
-    name: 'גיקטיים',
-    address: `https://www.geektime.co.il/channel/cloud-and-clear/`,
-    base: ''
-  },
-  {
-    name: 'גיקטיים',
-    address: `https://www.geektime.co.il/channel/human-resources/`,
-    base: ''
-  },
-  {
-    name: 'גיקטיים',
-    address: `https://www.geektime.co.il/channel/dev-bible/`,
-    base: ''
-  },
-  {
-    name: 'גיקטיים',
-    address: `https://www.geektime.co.il/channel/future-of-tech/`,
-    base: ''
-  },
-  {
-    name: 'גיקטיים',
-    address: `https://www.geektime.co.il/channel/dev-bible/`,
-    base: ''
-  },
-  {
-    name: 'GeekTime',
-    address: `https://www.geektime.com/`,
-    base: ''
-  },
-  {
-    name: 'GeekTime',
-    address: `https://www.geektime.com/tag/startups/`,
-    base: ''
-  },
-  {
-    name: 'GeekTime',
-    address: `https://www.geektime.com/tag/investments/`,
-    base: ''
-  },
-  {
-    name: 'Mako',
-    address: `https://www.mako.co.il/news-business/news`,
-    base: ''
-  },
-  {
-    name: 'Mako',
-    address: `https://www.mako.co.il/news-business/news?page=2`,
-    base: ''
-  },
-  {
-    name: 'GeekTime',
-    address: `https://www.mako.co.il/news-business/news?page=3`,
-    base: ''
-  }, {
-    name: 'GeekTime',
-    address: `https://www.mako.co.il/news-business/news?page=4`,
-    base: ''
-  }, {
-    name: 'GeekTime',
-    address: `https://www.mako.co.il/news-business/news?page=5`,
-    base: ''
-  }, {
-    name: 'GeekTime',
-    address: `https://www.mako.co.il/news-business/news?page=6`,
-    base: ''
-  }, {
-    name: 'GeekTime',
-    address: `https://www.mako.co.il/news-business/news?page=7`,
-    base: ''
-  },
-]
+// const newspapers = [
+//   {
+//     name: 'NoCamels',
+//     address: `https://nocamels.com/category/technology/`,
+//     base: ''
+//   },
+//   {
+//     name: 'Calcalist',
+//     address: `https://www.calcalistech.com/ctech/home/0,7340,L-5211,00.html`,
+//     base: ''
+//   },
+//   {
+//     name: 'TimesOfIsrael',
+//     address: `https://www.timesofisrael.com/tech-israel/`,
+//     base: ''
+//   },
+//   {
+//     name: 'TimesOfIsrael',
+//     address: `https://www.timesofisrael.com/israel-inside/`,
+//     base: ''
+//   },
+//   {
+//     name: 'Haaretz',
+//     address: `https://www.haaretz.com/israel-news/tech-news`,
+//     base: ''
+//   },
+//   {
+//     name: 'כלכליסט',
+//     address: `https://www.calcalist.co.il/calcalistech`,
+//     base: ''
+//   },
+//   {
+//     name: 'גיקטיים',
+//     address: `https://www.geektime.co.il/`,
+//     base: ''
+//   },
+//   {
+//     name: 'גיקטיים',
+//     address: `https://www.geektime.co.il/category/startup/`,
+//     base: ''
+//   },
+//   {
+//     name: 'גיקטיים',
+//     address: `https://www.geektime.co.il/category/development/`,
+//     base: ''
+//   },
+//   {
+//     name: 'גיקטיים',
+//     address: `https://www.geektime.co.il/channel/cloud-and-clear/`,
+//     base: ''
+//   },
+//   {
+//     name: 'גיקטיים',
+//     address: `https://www.geektime.co.il/channel/human-resources/`,
+//     base: ''
+//   },
+//   {
+//     name: 'גיקטיים',
+//     address: `https://www.geektime.co.il/channel/dev-bible/`,
+//     base: ''
+//   },
+//   {
+//     name: 'גיקטיים',
+//     address: `https://www.geektime.co.il/channel/future-of-tech/`,
+//     base: ''
+//   },
+//   {
+//     name: 'גיקטיים',
+//     address: `https://www.geektime.co.il/channel/dev-bible/`,
+//     base: ''
+//   },
+//   {
+//     name: 'GeekTime',
+//     address: `https://www.geektime.com/`,
+//     base: ''
+//   },
+//   {
+//     name: 'GeekTime',
+//     address: `https://www.geektime.com/tag/startups/`,
+//     base: ''
+//   },
+//   {
+//     name: 'GeekTime',
+//     address: `https://www.geektime.com/tag/investments/`,
+//     base: ''
+//   },
+//   {
+//     name: 'Mako',
+//     address: `https://www.mako.co.il/news-business/news`,
+//     base: ''
+//   },
+//   {
+//     name: 'Mako',
+//     address: `https://www.mako.co.il/news-business/news?page=2`,
+//     base: ''
+//   },
+//   {
+//     name: 'GeekTime',
+//     address: `https://www.mako.co.il/news-business/news?page=3`,
+//     base: ''
+//   }, {
+//     name: 'GeekTime',
+//     address: `https://www.mako.co.il/news-business/news?page=4`,
+//     base: ''
+//   }, {
+//     name: 'GeekTime',
+//     address: `https://www.mako.co.il/news-business/news?page=5`,
+//     base: ''
+//   }, {
+//     name: 'GeekTime',
+//     address: `https://www.mako.co.il/news-business/news?page=6`,
+//     base: ''
+//   }, {
+//     name: 'GeekTime',
+//     address: `https://www.mako.co.il/news-business/news?page=7`,
+//     base: ''
+//   },
+// ]
 
-const termSites = [
-  {
-    name: 'terms-heb',
-    address: `https://www.geektime.co.il/startup-and-high-tech-dictionary/`,
-    base: ''
-  },
-  {
-    name: 'idc-glossary',
-    address: `https://www.idc.org/idc/glossary-of-terms`,
-    base: ''
-  },
-]
-const articles = []
+// const termSites = [
+//   {
+//     name: 'terms-heb',
+//     address: `https://www.geektime.co.il/startup-and-high-tech-dictionary/`,
+//     base: ''
+//   },
+//   {
+//     name: 'idc-glossary',
+//     address: `https://www.idc.org/idc/glossary-of-terms`,
+//     base: ''
+//   },
+// ]
+// const articles = []
 
-newspapers.forEach(newspaper => {
-  axios.get(newspaper.address)
-    .then(response => {
-      const html = response.data
-      const $ = cheerio.load(html)
+// newspapers.forEach(newspaper => {
+//   axios.get(newspaper.address)
+//     .then(response => {
+//       const html = response.data
+//       const $ = cheerio.load(html)
 
-      $('a', html).each(function () {
-        const title = $(this).text()
-        const url = $(this).attr('href')
+//       $('a', html).each(function () {
+//         const title = $(this).text()
+//         const url = $(this).attr('href')
 
-        articles.push({
-          title,
-          url: newspaper.base + url,
-          source: newspaper.name
-        })
-      })
-    })
-})
+//         articles.push({
+//           title,
+//           url: newspaper.base + url,
+//           source: newspaper.name
+//         })
+//       })
+//     })
+// })
 
 const terms = []
 
