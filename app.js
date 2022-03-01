@@ -2,7 +2,6 @@ const express = require('express')
 const axios = require('axios')
 const cheerio = require('cheerio')
 const app = express()
-const serverless = require('serverless-http');
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 const path = require('path');
@@ -40,124 +39,124 @@ const UsersModel = mongoose.model('Users', new Schema(
 const TermModel = mongoose.model('Terms', new Schema(
   { title: String, description: String}));
 
-// const newspapers = [
-//   {
-//     name: 'NoCamels',
-//     address: `https://nocamels.com/category/technology/`,
-//     base: ''
-//   },
-//   {
-//     name: 'Calcalist',
-//     address: `https://www.calcalistech.com/ctech/home/0,7340,L-5211,00.html`,
-//     base: ''
-//   },
-//   {
-//     name: 'TimesOfIsrael',
-//     address: `https://www.timesofisrael.com/tech-israel/`,
-//     base: ''
-//   },
-//   {
-//     name: 'TimesOfIsrael',
-//     address: `https://www.timesofisrael.com/israel-inside/`,
-//     base: ''
-//   },
-//   {
-//     name: 'Haaretz',
-//     address: `https://www.haaretz.com/israel-news/tech-news`,
-//     base: ''
-//   },
-//   {
-//     name: 'כלכליסט',
-//     address: `https://www.calcalist.co.il/calcalistech`,
-//     base: ''
-//   },
-//   {
-//     name: 'גיקטיים',
-//     address: `https://www.geektime.co.il/`,
-//     base: ''
-//   },
-//   {
-//     name: 'גיקטיים',
-//     address: `https://www.geektime.co.il/category/startup/`,
-//     base: ''
-//   },
-//   {
-//     name: 'גיקטיים',
-//     address: `https://www.geektime.co.il/category/development/`,
-//     base: ''
-//   },
-//   {
-//     name: 'גיקטיים',
-//     address: `https://www.geektime.co.il/channel/cloud-and-clear/`,
-//     base: ''
-//   },
-//   {
-//     name: 'גיקטיים',
-//     address: `https://www.geektime.co.il/channel/human-resources/`,
-//     base: ''
-//   },
-//   {
-//     name: 'גיקטיים',
-//     address: `https://www.geektime.co.il/channel/dev-bible/`,
-//     base: ''
-//   },
-//   {
-//     name: 'גיקטיים',
-//     address: `https://www.geektime.co.il/channel/future-of-tech/`,
-//     base: ''
-//   },
-//   {
-//     name: 'גיקטיים',
-//     address: `https://www.geektime.co.il/channel/dev-bible/`,
-//     base: ''
-//   },
-//   {
-//     name: 'GeekTime',
-//     address: `https://www.geektime.com/`,
-//     base: ''
-//   },
-//   {
-//     name: 'GeekTime',
-//     address: `https://www.geektime.com/tag/startups/`,
-//     base: ''
-//   },
-//   {
-//     name: 'GeekTime',
-//     address: `https://www.geektime.com/tag/investments/`,
-//     base: ''
-//   },
-//   {
-//     name: 'Mako',
-//     address: `https://www.mako.co.il/news-business/news`,
-//     base: ''
-//   },
-//   {
-//     name: 'Mako',
-//     address: `https://www.mako.co.il/news-business/news?page=2`,
-//     base: ''
-//   },
-//   {
-//     name: 'GeekTime',
-//     address: `https://www.mako.co.il/news-business/news?page=3`,
-//     base: ''
-//   }, {
-//     name: 'GeekTime',
-//     address: `https://www.mako.co.il/news-business/news?page=4`,
-//     base: ''
-//   }, {
-//     name: 'GeekTime',
-//     address: `https://www.mako.co.il/news-business/news?page=5`,
-//     base: ''
-//   }, {
-//     name: 'GeekTime',
-//     address: `https://www.mako.co.il/news-business/news?page=6`,
-//     base: ''
-//   }, {
-//     name: 'GeekTime',
-//     address: `https://www.mako.co.il/news-business/news?page=7`,
-//     base: ''
-//   },
-// ]
+const newspapers = [
+  {
+    name: 'NoCamels',
+    address: `https://nocamels.com/category/technology/`,
+    base: ''
+  },
+  {
+    name: 'Calcalist',
+    address: `https://www.calcalistech.com/ctech/home/0,7340,L-5211,00.html`,
+    base: ''
+  },
+  {
+    name: 'TimesOfIsrael',
+    address: `https://www.timesofisrael.com/tech-israel/`,
+    base: ''
+  },
+  {
+    name: 'TimesOfIsrael',
+    address: `https://www.timesofisrael.com/israel-inside/`,
+    base: ''
+  },
+  {
+    name: 'Haaretz',
+    address: `https://www.haaretz.com/israel-news/tech-news`,
+    base: ''
+  },
+  {
+    name: 'כלכליסט',
+    address: `https://www.calcalist.co.il/calcalistech`,
+    base: ''
+  },
+  {
+    name: 'גיקטיים',
+    address: `https://www.geektime.co.il/`,
+    base: ''
+  },
+  {
+    name: 'גיקטיים',
+    address: `https://www.geektime.co.il/category/startup/`,
+    base: ''
+  },
+  {
+    name: 'גיקטיים',
+    address: `https://www.geektime.co.il/category/development/`,
+    base: ''
+  },
+  {
+    name: 'גיקטיים',
+    address: `https://www.geektime.co.il/channel/cloud-and-clear/`,
+    base: ''
+  },
+  {
+    name: 'גיקטיים',
+    address: `https://www.geektime.co.il/channel/human-resources/`,
+    base: ''
+  },
+  {
+    name: 'גיקטיים',
+    address: `https://www.geektime.co.il/channel/dev-bible/`,
+    base: ''
+  },
+  {
+    name: 'גיקטיים',
+    address: `https://www.geektime.co.il/channel/future-of-tech/`,
+    base: ''
+  },
+  {
+    name: 'גיקטיים',
+    address: `https://www.geektime.co.il/channel/dev-bible/`,
+    base: ''
+  },
+  {
+    name: 'GeekTime',
+    address: `https://www.geektime.com/`,
+    base: ''
+  },
+  {
+    name: 'GeekTime',
+    address: `https://www.geektime.com/tag/startups/`,
+    base: ''
+  },
+  {
+    name: 'GeekTime',
+    address: `https://www.geektime.com/tag/investments/`,
+    base: ''
+  },
+  {
+    name: 'Mako',
+    address: `https://www.mako.co.il/news-business/news`,
+    base: ''
+  },
+  {
+    name: 'Mako',
+    address: `https://www.mako.co.il/news-business/news?page=2`,
+    base: ''
+  },
+  {
+    name: 'GeekTime',
+    address: `https://www.mako.co.il/news-business/news?page=3`,
+    base: ''
+  }, {
+    name: 'GeekTime',
+    address: `https://www.mako.co.il/news-business/news?page=4`,
+    base: ''
+  }, {
+    name: 'GeekTime',
+    address: `https://www.mako.co.il/news-business/news?page=5`,
+    base: ''
+  }, {
+    name: 'GeekTime',
+    address: `https://www.mako.co.il/news-business/news?page=6`,
+    base: ''
+  }, {
+    name: 'GeekTime',
+    address: `https://www.mako.co.il/news-business/news?page=7`,
+    base: ''
+  },
+]
 
 const termSites = [
   {
@@ -171,26 +170,26 @@ const termSites = [
     base: ''
   },
 ]
-// const articles = []
+const articles = []
 
-// newspapers.forEach(newspaper => {
-//   axios.get(newspaper.address)
-//     .then(response => {
-//       const html = response.data
-//       const $ = cheerio.load(html)
+newspapers.forEach(newspaper => {
+  axios.get(newspaper.address)
+    .then(response => {
+      const html = response.data
+      const $ = cheerio.load(html)
 
-//       $('a', html).each(function () {
-//         const title = $(this).text()
-//         const url = $(this).attr('href')
+      $('a', html).each(function () {
+        const title = $(this).text()
+        const url = $(this).attr('href')
 
-//         articles.push({
-//           title,
-//           url: newspaper.base + url,
-//           source: newspaper.name
-//         })
-//       })
-//     })
-// })
+        articles.push({
+          title,
+          url: newspaper.base + url,
+          source: newspaper.name
+        })
+      })
+    })
+})
 
 const terms = []
 
@@ -200,26 +199,26 @@ app.get("/", (req, res) => {
   res.json("BerlBot's API");
 });
 
-// termSites.forEach(term => {
-//   axios.get(term.address)
-//     .then(response => {
-//       const html = response.data
-//       const $ = cheerio.load(html)
+termSites.forEach(term => {
+  axios.get(term.address)
+    .then(response => {
+      const html = response.data
+      const $ = cheerio.load(html)
 
-//       $('p', html).each(function () {
-//         if ($(this).text().includes('(')) {
-//           const title = $(this).text()
-//           const secondTitle = title.substr(0, title.indexOf('.'))
-//           const description = $(this).next('p').text()
-//           terms.push({
-//             title,
-//             description: description,
-//             source: term.name,
-//           })
-//         }
-//       })
-//     })
-// })
+      $('p', html).each(function () {
+        if ($(this).text().includes('(')) {
+          const title = $(this).text()
+          const secondTitle = title.substr(0, title.indexOf('.'))
+          const description = $(this).next('p').text()
+          terms.push({
+            title,
+            description: description,
+            source: term.name,
+          })
+        }
+      })
+    })
+})
 
 app.get('/news', (req, res) => {
   res.json(articles)
@@ -240,42 +239,42 @@ app.post('/term/add', async (req, res) => {
 });
 
 
-// app.get('/news/:word/title', (req, res) => {
-//   const word = req.params.word
-//   const articleResult = articles.filter(article => article.title.includes(word))
-//   const termResult = terms.filter(term => term.title.includes(word))
-//   const example = articleResult.length > 0 ? (articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()) : ('אין דוגמה לכתבה')
-//   if (articleResult.length > 0) {
-//     const response = `${termResult[0].title} - ${termResult[0].description} - כתבה לדוגמה: משעה ${example}`
-//     res.json(response)
-//   } else {
-//     const response = `${termResult[0].title} - ${termResult[0].description}`
-//     res.json(response)
-//   }
-// })
-// app.get('/news/:word/description', (req, res) => {
-//   const word = req.params.word
-//   const articleResult = articles.filter(article => article.title.includes(word))
-//   const termResult = terms.filter(term => term.title.includes(word))
-//   const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
-//   if (articleResult.length > 0) {
-//     res.json(termResult[0].description)
-//   } else {
-//     res.json(termResult)
-//   }
-// })
+app.get('/news/:word/title', (req, res) => {
+  const word = req.params.word
+  const articleResult = articles.filter(article => article.title.includes(word))
+  const termResult = terms.filter(term => term.title.includes(word))
+  const example = articleResult.length > 0 ? (articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()) : ('אין דוגמה לכתבה')
+  if (articleResult.length > 0) {
+    const response = `${termResult[0].title} - ${termResult[0].description} - כתבה לדוגמה: משעה ${example}`
+    res.json(response)
+  } else {
+    const response = `${termResult[0].title} - ${termResult[0].description}`
+    res.json(response)
+  }
+})
+app.get('/news/:word/description', (req, res) => {
+  const word = req.params.word
+  const articleResult = articles.filter(article => article.title.includes(word))
+  const termResult = terms.filter(term => term.title.includes(word))
+  const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
+  if (articleResult.length > 0) {
+    res.json(termResult[0].description)
+  } else {
+    res.json(termResult)
+  }
+})
 
-// app.get('/news/:word/example', (req, res) => {
-//   const word = req.params.word
-//   const articleResult = articles.filter(article => article.title.includes(word))
-//   const termResult = terms.filter(term => term.title.includes(word))
-//   const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
-//   if (articleResult.length > 0) {
-//     res.json(example)
-//   } else {
-//     res.json(termResult)
-//   }
-// })
+app.get('/news/:word/example', (req, res) => {
+  const word = req.params.word
+  const articleResult = articles.filter(article => article.title.includes(word))
+  const termResult = terms.filter(term => term.title.includes(word))
+  const example = articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()
+  if (articleResult.length > 0) {
+    res.json(example)
+  } else {
+    res.json(termResult)
+  }
+})
 
 
 // user data
