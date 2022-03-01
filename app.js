@@ -159,18 +159,18 @@ const TermModel = mongoose.model('Terms', new Schema(
 //   },
 // ]
 
-// const termSites = [
-//   {
-//     name: 'terms-heb',
-//     address: `https://www.geektime.co.il/startup-and-high-tech-dictionary/`,
-//     base: ''
-//   },
-//   {
-//     name: 'idc-glossary',
-//     address: `https://www.idc.org/idc/glossary-of-terms`,
-//     base: ''
-//   },
-// ]
+const termSites = [
+  {
+    name: 'terms-heb',
+    address: `https://www.geektime.co.il/startup-and-high-tech-dictionary/`,
+    base: ''
+  },
+  {
+    name: 'idc-glossary',
+    address: `https://www.idc.org/idc/glossary-of-terms`,
+    base: ''
+  },
+]
 // const articles = []
 
 // newspapers.forEach(newspaper => {
@@ -200,44 +200,44 @@ app.get("/", (req, res) => {
   res.json("BerlBot's API");
 });
 
-// termSites.forEach(term => {
-//   axios.get(term.address)
-//     .then(response => {
-//       const html = response.data
-//       const $ = cheerio.load(html)
+termSites.forEach(term => {
+  axios.get(term.address)
+    .then(response => {
+      const html = response.data
+      const $ = cheerio.load(html)
 
-//       $('p', html).each(function () {
-//         if ($(this).text().includes('(')) {
-//           const title = $(this).text()
-//           const secondTitle = title.substr(0, title.indexOf('.'))
-//           const description = $(this).next('p').text()
-//           terms.push({
-//             title,
-//             description: description,
-//             source: term.name,
-//           })
-//         }
-//       })
-//     })
-// })
+      $('p', html).each(function () {
+        if ($(this).text().includes('(')) {
+          const title = $(this).text()
+          const secondTitle = title.substr(0, title.indexOf('.'))
+          const description = $(this).next('p').text()
+          terms.push({
+            title,
+            description: description,
+            source: term.name,
+          })
+        }
+      })
+    })
+})
 
-// app.get('/news', (req, res) => {
-//   res.json(articles)
-// })
+app.get('/news', (req, res) => {
+  res.json(articles)
+})
 
-// app.get('/terms', (req, res) => {
-//   res.json(terms)
-// })
+app.get('/terms', (req, res) => {
+  res.json(terms)
+})
 
-// app.post('/term/add', async (req, res) => {
-//   new TermModel(req.body)
+app.post('/term/add', async (req, res) => {
+  new TermModel(req.body)
 
-//   TermModel.save
+  TermModel.save
 
-//   let termModel = new TermModel({ title: req.body.title, description: req.body.description});
-//   TermModel = await TermModel.save();
-//   res.send(termModel);
-// });
+  let termModel = new TermModel({ title: req.body.title, description: req.body.description});
+  TermModel = await TermModel.save();
+  res.send(termModel);
+});
 
 
 // app.get('/news/:word/title', (req, res) => {
