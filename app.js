@@ -278,50 +278,50 @@ app.get("/", (req, res) => {
 // })
 
 
-// user data
-// app.post('/user/add', async (req, res) => {
-//   new UsersModel(req.body)
+user data
+app.post('/user/add', async (req, res) => {
+  new UsersModel(req.body)
 
-//   UsersModel.save
+  UsersModel.save
 
-//   let usersModel = new UsersModel({ name: req.body.name, studies: req.body.studies, number: req.body.number });
-//   usersModel = await usersModel.save();
-//   res.send(usersModel);
-// });
+  let usersModel = new UsersModel({ name: req.body.name, studies: req.body.studies, number: req.body.number });
+  usersModel = await usersModel.save();
+  res.send(usersModel);
+});
 
-// app.get("/users", (req, res) => {
-//   UsersModel.find({}, (err, users) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(users);
-//     }
-//   });
-// });
+app.get("/users", (req, res) => {
+  UsersModel.find({}, (err, users) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(users);
+    }
+  });
+});
 
-// app.get("/users/:number/name", (req, res) => {
-//   const data = UsersModel.find({
-//     number: req.params.number,
-//   }, (err, data) => {
-//     if (data.length > 0) {
-//       res.send(data[0].name);
-//     } else {
-//       res.json(err);
-//     }
-//   });
-// });
+app.get("/users/:number/name", (req, res) => {
+  const data = UsersModel.find({
+    number: req.params.number,
+  }, (err, data) => {
+    if (data.length > 0) {
+      res.send(data[0].name);
+    } else {
+      res.json(err);
+    }
+  });
+});
 
-// app.get("/users/:number/studies", (req, res) => {
-//   const data = UsersModel.find({
-//     number: req.params.number,
-//   }, (err, data) => {
-//     if (err) {
-//       res.send(err);
-//     } else {
-//       res.json(data[0].studies);
-//     }
-//   });
-// });
+app.get("/users/:number/studies", (req, res) => {
+  const data = UsersModel.find({
+    number: req.params.number,
+  }, (err, data) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(data[0].studies);
+    }
+  });
+});
 
 
 
