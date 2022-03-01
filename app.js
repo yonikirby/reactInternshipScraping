@@ -200,26 +200,26 @@ app.get("/", (req, res) => {
   res.json("BerlBot's API");
 });
 
-termSites.forEach(term => {
-  axios.get(term.address)
-    .then(response => {
-      const html = response.data
-      const $ = cheerio.load(html)
+// termSites.forEach(term => {
+//   axios.get(term.address)
+//     .then(response => {
+//       const html = response.data
+//       const $ = cheerio.load(html)
 
-      $('p', html).each(function () {
-        if ($(this).text().includes('(')) {
-          const title = $(this).text()
-          const secondTitle = title.substr(0, title.indexOf('.'))
-          const description = $(this).next('p').text()
-          terms.push({
-            title,
-            description: description,
-            source: term.name,
-          })
-        }
-      })
-    })
-})
+//       $('p', html).each(function () {
+//         if ($(this).text().includes('(')) {
+//           const title = $(this).text()
+//           const secondTitle = title.substr(0, title.indexOf('.'))
+//           const description = $(this).next('p').text()
+//           terms.push({
+//             title,
+//             description: description,
+//             source: term.name,
+//           })
+//         }
+//       })
+//     })
+// })
 
 app.get('/news', (req, res) => {
   res.json(articles)
