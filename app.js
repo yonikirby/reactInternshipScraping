@@ -278,7 +278,7 @@ app.get("/", (req, res) => {
 // })
 
 
-user data
+// user data
 app.post('/user/add', async (req, res) => {
   new UsersModel(req.body)
 
