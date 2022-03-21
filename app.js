@@ -8,6 +8,9 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { google } = require('googleapis')
+const request = require('request')
+const { object } = require('webidl-conversions')
 
 app.use(cors())
 app.use(favicon(path.join(__dirname, "favicon.ico")));
@@ -172,24 +175,24 @@ const termSites = [
 ]
 const articles = []
 
-// newspapers.forEach(newspaper => {
-//   axios.get(newspaper.address)
-//     .then(response => {
-//       const html = response.data
-//       const $ = cheerio.load(html)
+newspapers.forEach(newspaper => {
+  axios.get(newspaper.address)
+    .then(response => {
+      const html = response.data
+      const $ = cheerio.load(html)
       
-//       $('a', html).each(function () {
-//         const title = $(this).text()
-//         const url = $(this).attr('href')
+      $('a', html).each(function () {
+        const title = $(this).text()
+        const url = $(this).attr('href')
 
-//         articles.push({
-//           title,
-//           url: newspaper.base + url,
-//           source: newspaper.name
-//         })
-//       })
-//     })
-// })
+        articles.push({
+          title,
+          url: newspaper.base + url,
+          source: newspaper.name
+        })
+      })
+    })
+})
 
 const terms = []
 
@@ -199,26 +202,26 @@ app.get("/", (req, res) => {
   res.json("BerlBot's API");
 });
 
-// termSites.forEach(term => {
-//   axios.get(term.address)
-//     .then(response => {
-//       const html = response.data
-//       const $ = cheerio.load(html)
+termSites.forEach(term => {
+  axios.get(term.address)
+    .then(response => {
+      const html = response.data
+      const $ = cheerio.load(html)
 
-//       $('p', html).each(function () {
-//         if ($(this).text().includes('(')) {
-//           const title = $(this).text()
-//           const secondTitle = title.substr(0, title.indexOf('.'))
-//           const description = $(this).next('p').text()
-//           terms.push({
-//             title,
-//             description: description,
-//             source: term.name,
-//           })
-//         }
-//       })
-//     })
-// })
+      $('p', html).each(function () {
+        if ($(this).text().includes('(')) {
+          const title = $(this).text()
+          const secondTitle = title.substr(0, title.indexOf('.'))
+          const description = $(this).next('p').text()
+          terms.push({
+            title,
+            description: description,
+            source: term.name,
+          })
+        }
+      })
+    })
+})
 
 app.get('/news', (req, res) => {
   res.json(articles)
@@ -438,5 +441,171 @@ app.delete('/milgot/delete/:id', (req, res) => {
   }); 
 });
 
+
+
+// google sheet
+
+
+
+app.get('/getQandA/:id', async (req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+
+    //create client instance
+    const client = await auth.getClient()
+
+    //instance of google sheets api
+    const googlesheets = google.sheets({
+        version: 'v4',
+        auth: client
+    }) 
+
+    const id = req.params.id
+
+    //get meta data about spreasheet
+    const data = await googlesheets.spreadsheets.get({
+        auth,
+        spreadsheetId: id
+
+    })
+
+    //read rows from spreadsheet
+    const getRows = await googlesheets.spreadsheets.values.get({
+        auth, 
+        spreadsheetId: id,
+        range: data.data.sheets[0].properties.title
+    })
+    const values = getRows.data.values
+    delete values[0]
+    let questions = []
+    if(values.length > 0){
+        let i = 1;
+        let questionsArray = []
+        values.forEach((data, index) => {
+            questions.push({
+                question_id: index,
+                question: data[0],
+                answers: [
+                    {
+                        answer_id: 1,
+                        text: data[1],
+                        correct: true
+                    },
+                    {
+                        answer_id: 2, 
+                        text: data[2],
+                        correct: false
+                    },
+                    {
+                        answer_id: 3,
+                        text: data[3],
+                        correct: false
+                    },
+                    {
+                        answer_id: 4,
+                        text: data[4],
+                        correct: false
+                    }
+                ]
+            })
+        })
+
+    }
+    // res.header('authorization', 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlJUa3pRamhHTTBJMU16RTVOMFpGUlRjd09ETTRRVUpCTlRFeE5UbEdOVUZGTkVZM1JEazROdyJ9.eyJpc3MiOiJodHRwczovL2xvZ2luLmNvY29odWIuYWkvIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDUxNTgxNTA2OTY2Njc1MzEyNzMiLCJhdWQiOlsiaHR0cHM6Ly9jb2NvaHViLmFpL2FwaSIsImh0dHBzOi8vZGV2LWdubjk1M3RkLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2NDY3NDI4NDMsImV4cCI6MTY0NjgyOTI0MywiYXpwIjoiZkNoY3hYaXdyMzlYVzZ0b29QVmZVRm0wekhRTHE1eU8iLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIG9mZmxpbmVfYWNjZXNzIn0.W9QP-YTOB3i0WCOJWstR7jsoTgbHgWaJ8F5CeEH1KdcK_1SmpFGGm5wbbM6PZ6rx2zzj5wjvzYGUhqkWC45JFtSv4mI0lHg9XKk_kK0bhv6nI12ZyMLcHD30VjMtW1lY1TygNZnBXPkCq08ibJgn_M2TNKOMicjteYYT9KIgreXeX4mXyYCeItVJVNBgpjBd3HcsiN2VARjSwQ2UXrCdPvyYhwus50IWexca1xch7xeoBWZ2SgpXZ8r6Z2tT3YxQOvddgEuBFJLFoKqx8SHcTftKrVmE3hzA5GwV3ZfEqw28WKXkQzJts5lpatAG5tqFvI8_puWpOzuB6BN3oOm5Lg')
+    const url = 'https://cocohub.ai/api/config/glorious-overjoyed-grammy-220-quiz_v2'
+    request({
+        url,
+        method: 'POST',
+        headers: {
+            // 'content-type': 'application/json',
+            'authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlJUa3pRamhHTTBJMU16RTVOMFpGUlRjd09ETTRRVUpCTlRFeE5UbEdOVUZGTkVZM1JEazROdyJ9.eyJpc3MiOiJodHRwczovL2xvZ2luLmNvY29odWIuYWkvIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDUxNTgxNTA2OTY2Njc1MzEyNzMiLCJhdWQiOlsiaHR0cHM6Ly9jb2NvaHViLmFpL2FwaSIsImh0dHBzOi8vZGV2LWdubjk1M3RkLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2NDY3NDI4NDMsImV4cCI6MTY0NjgyOTI0MywiYXpwIjoiZkNoY3hYaXdyMzlYVzZ0b29QVmZVRm0wekhRTHE1eU8iLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIG9mZmxpbmVfYWNjZXNzIn0.W9QP-YTOB3i0WCOJWstR7jsoTgbHgWaJ8F5CeEH1KdcK_1SmpFGGm5wbbM6PZ6rx2zzj5wjvzYGUhqkWC45JFtSv4mI0lHg9XKk_kK0bhv6nI12ZyMLcHD30VjMtW1lY1TygNZnBXPkCq08ibJgn_M2TNKOMicjteYYT9KIgreXeX4mXyYCeItVJVNBgpjBd3HcsiN2VARjSwQ2UXrCdPvyYhwus50IWexca1xch7xeoBWZ2SgpXZ8r6Z2tT3YxQOvddgEuBFJLFoKqx8SHcTftKrVmE3hzA5GwV3ZfEqw28WKXkQzJts5lpatAG5tqFvI8_puWpOzuB6BN3oOm5Lg'
+        },
+        body: JSON.stringify(questions),
+        // json: true
+    }, function(error, response, body){
+        setTimeout(() => console.log('response', response.statusCode, body), 2000)
+
+    })
+    res.status(200).send(JSON.stringify(questions))
+})
+
+app.get('/:id', async(req, res) => {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: 'credentials.json',
+        scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    })
+
+    //create client instance
+    const client = await auth.getClient()
+
+    //instance of google sheets api
+    const googlesheets = google.sheets({
+        version: 'v4',
+        auth: client
+    }) 
+
+    const id = req.params.id
+
+    //get meta data about spreasheet
+    const data = await googlesheets.spreadsheets.get({
+        auth,
+        spreadsheetId: id
+
+    })
+
+    //read rows from spreadsheet
+    const getRows = await googlesheets.spreadsheets.values.get({
+        auth, 
+        spreadsheetId: id,
+        range: data.data.sheets[0].properties.title
+    })
+    const values = getRows.data.values
+    delete values[0]
+    let toSend = {}
+    values.forEach((value, index) => {
+        console.log(index)
+        toSend['Question ' + index] = {
+            שאלה: value[0],
+            תשובות: { 
+                1:{
+                    תשובה: value[1],
+                    נכון: true
+                },
+                2:{
+                    תשובה: value[2],
+                    נכון: false
+                },
+                3: {
+                    תשובה: value[3],
+                    נכון: false
+                },
+                4: {
+                    תשובה: value[4],
+                    נכון: false
+                }
+            }
+        }
+    })
+
+    const url = 'https://cocohub.ai/api/config/glorious-overjoyed-grammy-220-quiz_v2'
+    request({
+        url,
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json',
+            'authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlJUa3pRamhHTTBJMU16RTVOMFpGUlRjd09ETTRRVUpCTlRFeE5UbEdOVUZGTkVZM1JEazROdyJ9.eyJpc3MiOiJodHRwczovL2xvZ2luLmNvY29odWIuYWkvIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDUxNTgxNTA2OTY2Njc1MzEyNzMiLCJhdWQiOlsiaHR0cHM6Ly9jb2NvaHViLmFpL2FwaSIsImh0dHBzOi8vZGV2LWdubjk1M3RkLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2NDY3NDI4NDMsImV4cCI6MTY0NjgyOTI0MywiYXpwIjoiZkNoY3hYaXdyMzlYVzZ0b29QVmZVRm0wekhRTHE1eU8iLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIG9mZmxpbmVfYWNjZXNzIn0.W9QP-YTOB3i0WCOJWstR7jsoTgbHgWaJ8F5CeEH1KdcK_1SmpFGGm5wbbM6PZ6rx2zzj5wjvzYGUhqkWC45JFtSv4mI0lHg9XKk_kK0bhv6nI12ZyMLcHD30VjMtW1lY1TygNZnBXPkCq08ibJgn_M2TNKOMicjteYYT9KIgreXeX4mXyYCeItVJVNBgpjBd3HcsiN2VARjSwQ2UXrCdPvyYhwus50IWexca1xch7xeoBWZ2SgpXZ8r6Z2tT3YxQOvddgEuBFJLFoKqx8SHcTftKrVmE3hzA5GwV3ZfEqw28WKXkQzJts5lpatAG5tqFvI8_puWpOzuB6BN3oOm5Lg'
+        },
+        body: toSend,
+        json: true
+    }, function(error, response, body){
+        setTimeout(() => console.log('response', response.statusCode, body), 2000)
+
+    })
+
+    console.log(toSend)
+    res.send(toSend)
+})
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));  
