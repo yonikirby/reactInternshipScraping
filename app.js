@@ -167,11 +167,11 @@ const termSites = [
     address: `https://www.geektime.co.il/startup-and-high-tech-dictionary/`,
     base: ''
   },
-  {
-    name: 'idc-glossary',
-    address: `https://www.idc.org/idc/glossary-of-terms`,
-    base: ''
-  },
+  // {
+  //   name: 'idc-glossary',
+  //   address: `https://www.idc.org/idc/glossary-of-terms`,
+  //   base: ''
+  // },
 ]
 const articles = []
 
@@ -243,7 +243,8 @@ app.post('/term/add', async (req, res) => {
 
 
 app.get('/news/:word/title', (req, res) => {
-  const word = req.params.word
+  console.log(terms)
+  const word = req.params.word === 'random' ? terms[Math.floor(Math.random() * terms.length)].title : req.params.word
   const articleResult = articles.filter(article => article.title.includes(word))
   const termResult = terms.filter(term => term.title.includes(word))
   const example = articleResult.length > 0 ? (articleResult[0].title.replace(/ +(?= )/g, "").replace(/(\r\n|\n|\r)/gm, "").trim()) : ('אין דוגמה לכתבה')
@@ -255,6 +256,7 @@ app.get('/news/:word/title', (req, res) => {
     res.json(response)
   }
 })
+
 app.get('/news/:word/description', (req, res) => {
   const word = req.params.word
   const articleResult = articles.filter(article => article.title.includes(word))
