@@ -53,6 +53,9 @@ const TermModel = mongoose.model(
   new Schema({ title: String, description: String })
 );
 
+const myEducationTerms = [];
+
+
 const newspapers = [
   {
     name: "NoCamels",
@@ -1020,7 +1023,9 @@ educationTermSites.forEach((term) => {
 
                           var file = fs.createWriteStream('./myeducationterms.txt');
                           file.on('error', function(err) { /* error handling */ });
-                          educationTerms.forEach(function(v) { file.write(JSON.stringify(v, null, 2) + "\n"); });
+                          educationTerms.forEach(function(v) { 
+                            myEducationTerms.push(JSON.stringify(v, null, 2));
+                            file.write(JSON.stringify(v, null, 2) + "\n"); });
                           file.end();
       })();
   });
@@ -1854,7 +1859,9 @@ file.end();
 getbrancoweissEducationTerms();
 
 
-
+app.get("/educationterms", (req, res) => {
+  res(myEducationTerms);
+});
 
 
 

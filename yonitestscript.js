@@ -190,111 +190,6 @@ const brancoweisseducationTermSite = [
 
 
 
-/*
-highTechTermSites.forEach((term) => {
-    axios.get(term.address).then((response) => {
-      const html = response.data;
-      const $ = cheerio.load(html);
-  
-  const url = $(this).attr("href");
-  
-      if (term.address == "https://www.geektime.co.il/startup-and-high-tech-dictionary/"){
-                        $("p", html).each(function () {
-                            if ($(this).has("strong")){
-                                                            const title = $(this).text();
-                                                            console.log("title: " + title)
-                                                            if(title.includes("(")){
-                                                                console.log("inside big loop")
-                                                                                var description = "";
-                                                                                var itr = undefined;
-                                                                                
-                                                                                var continueLoop = true;
-                                                                                var currentElement = $(this).next('p');
-                                                                                console.log("currentElement.text: " + currentElement.text())
-                                                                                while (!($.contains(currentElement.get(0), $('strong')))){  
-                                                                                    console.log("in tiny loop")
-                                                                                    description += currentElement.text();
-
-
-                                                                                    currentElement = currentElement.next('p');
-                                                                                }
-
-
-                                                                                
-                                                                                
-                                                                                terms.push({
-                                                                                    title,
-                                                                                    description: description,
-                                                                                    source: term.name
-                                                                                });
-                                                                                //console.log("once in big loop and terms: " + JSON.stringify(terms, null, 2))
-                                                            }
-                                }
-                        });
-                        console.log("at end and terms: " + JSON.stringify(terms, null, 2))
-          }
-    });
-    
-  });
-
-  require('fs').writeFile(
-
-    './myjson.txt',
-
-    JSON.stringify(terms, null, 2),
-
-    function (err) {
-        if (err) {
-            console.error('Crap happens');
-        }
-    }
-);
-  //fs.writeFileSync('C:/myfolder/yonikirbyoutput.txt', terms);*/
-
-  
-  /*fs.writeFile('C:/Users/yonik/Documents/reactInternshipScraping/bina-api/myjson.txt', JSON.stringify(terms, null, 2), err => {
-    if (err) {
-      console.error(err)
-      return
-    }
-    //file written successfully
-    console.log("file written successfully")
-})
-
-
-//var fs = require('fs');
-//console.log(terms.toString())
-
-/*
-var file = fs.createWriteStream('C:/myfolder/yonikirbyoutput.txt');
-file.on('error', function(err) { /* error handling  });
-terms.forEach(function(v) { file.write(v.join(', ') + '\n'); });
-file.end();
-*/
-//}
-
-///catch {
-
-//}
-
-
-/*
-async function start () {
-  return doEducationTerms();
-  
-  //console.log(result);
-}
-
-(async() => {
-  console.log('before start');
-
-  await start();
-  
-  console.log('after start');
-})();
-*/
-//doEducationTerms();
-
 
 
 
@@ -369,43 +264,9 @@ async function scrapeMethodicTermSite(){
   })
 
 
-/*
-  function strip(html){
-    let doc = parser.parseFromString(html, 'text/html');
-    return doc.textContent || "";
- }
-*/
-
-
-  //console.log(JSON.stringify(educationTerms, null, 2));
-  //console.log("secondaryCount: " + secondaryCount);
-  /*var fs = require('fs');
-
-  var file = fs.createWriteStream('C:/Users/yonik/Documents/reactInternshipScraping/bina-api/myjson.txt');
-  file.on('error', function(err) { /* error handling */ //});
-  //educationTerms.forEach(function(v) { file.write(JSON.stringify(v) + '\n'); });
-  //file.end();
-
-
-
 
 
 }
-
-//doEducationTerms();
-
-
-//console.log("אולפן המשך:" + getCBSEducationTerm("אולפן המשך"));
-//console.log("ישיבה גבוהה:" + getCBSEducationTerm("ישיבה גבוהה"));
-//console.log("עזיבת התלמיד את בית הספר:" + getCBSEducationTerm("עזיבת התלמיד את בית הספר"));
-
-
-//getCBSEducationTerms();
-//console.log(getCBSEducationTerm());
-
-//console.log("למידה טובה:" + getbrancoweissEducationTerm("חשיבה לטראלית"));
-
-
 
 
 function doEducationTermsFinal(){
